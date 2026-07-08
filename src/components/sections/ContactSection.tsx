@@ -1,0 +1,290 @@
+import { useState } from 'react';
+import { motion, type Variants } from 'framer-motion';
+// Premium Icons replacing primitive emojis to handle alignment cleaner
+import { Phone, Mail, MessageSquare, Briefcase, MapPin } from 'lucide-react';
+import officeImg from '../../assets/image/bd4d72ea-ec2b-405e-b8e7-d09eb87cf0bd.jfif';
+import { useLanguage } from '../../context/LanguageContext';
+import { UI, pick } from '../../data/translations';
+
+const fadeInUp: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
+};
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
+};
+
+const OFFICES = [
+  { name: 'Corporate Head Office', address: '47, Nassa Heights, Gulshan South Avenue, Gulshan-1, Dhaka.', email: 'sales@shifapropertiesltd.com.bd', cell: '01877715333', hotline: '+8809610066666', mapUrl: 'https://maps.google.com/?q=Shifa+Properties+Ltd+Group+Gulshan+Dhaka', mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3650.546!2d90.4125!3d23.7937!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDQ3JzM3LjMiTiA5MMKwMjQnNDUuMCJF!5e0!3m2!1sen!2sbd!4v1' },
+  { name: 'Mohakhali DOHS Office', address: 'Plot-39B (1st Floor), Road-29, New DOHS Mohakhali, Dhaka', email: 'sales@shifapropertiesltd.com.bd', cell: '01222845560', hotline: '+8809610066666', mapUrl: 'https://maps.google.com/?q=Mohakhali+DOHS+Dhaka', mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3650.2!2d90.4005!3d23.7966!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDQ3JzQ3LjciTiA5MMKwMjQnMS44IkU!5e0!3m2!1sen!2sbd!4v1' },
+  { name: 'Uttara Office', address: '2nd & 3rd Floor, House 18 & 20, Road 6/C, ACM & MF Tower, Dhaka 1230', email: 'sales@shifapropertiesltd.com.bd', cell: '01894944666', hotline: '+8809610066666', mapUrl: 'https://maps.google.com/?q=Shifa+Properties+Ltd+Group+Uttara+Dhaka', mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3648.5!2d90.3997!3d23.8759!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDUyJzMyLjkiTiA5MMKwMjMnNTguNiJF!5e0!3m2!1sen!2sbd!4v1' },
+];
+
+const INTEREST_VALUES = [
+  'Hotel Suite Investment',
+  'Padma Grand Hotel booking',
+  'Land Purchases OCDL',
+  'Careers',
+  'General Query',
+];
+
+const ContactSection: React.FC = () => {
+  const { lang } = useLanguage();
+  const c = UI.contact;
+
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', subject: 'Hotel Suite Investment', message: '' });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setTimeout(() => {
+      setSubmitted(false);
+      setFormData({ name: '', email: '', phone: '', subject: 'Hotel Suite Investment', message: '' });
+    }, 4000);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  return (
+    <section id="contact" className="overflow-hidden">
+
+      {/* ── HERO BANNER & CONTACT QUICK LINKS ── */}
+      <div className="relative overflow-hidden" style={{ background: '#e8f4fd' }}>
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
+          <span className="font-black tracking-tighter leading-none whitespace-nowrap"
+            style={{ fontSize: 'clamp(80px, 18vw, 220px)', color: 'rgba(0,0,0,0.05)', fontFamily: 'Playfair Display, serif' }}>
+            {pick(c.watermark, lang)}
+          </span>
+        </div>
+        <div className="absolute inset-0">
+          <img src={officeImg} alt="Shifa Properties Ltd Office" className="w-full h-full object-cover opacity-15" />
+        </div>
+
+        <div className="relative z-10 py-16 px-4 flex flex-col items-center">
+          {/* Expanded max-w-2xl to max-w-4xl to prevent layout breaks on long text blocks */}
+          <motion.div className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 md:p-10 w-full max-w-4xl border border-sky-100"
+            variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-100px' }}>
+            <h2 className="text-center font-black text-2xl md:text-3xl mb-1 text-black" style={{ fontFamily: 'Playfair Display, serif' }}>
+              {pick(c.title, lang)}
+            </h2>
+            <p className="text-center text-gray-500 text-sm mb-8">{pick(c.subtitle, lang)}</p>
+
+            {/* Changed from 2-column grid directly to clean responsive wrapper layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+              {/* Call Card */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-sky-50 border border-sky-100">
+                <div className="flex items-center gap-4 min-w-0">
+                  <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl flex-shrink-0">
+                    <Phone className="w-5 h-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-bold text-sm text-black truncate">{pick(c.callUs, lang)}</p>
+                    <p className="text-gray-500 text-xs mt-0.5">01877715333</p>
+                  </div>
+                </div>
+                <a href="tel:01877715333" className="text-white text-xs font-bold px-5 py-2.5 rounded-xl flex-shrink-0 text-center shadow-sm bg-black hover:bg-neutral-800 transition-colors">
+                  {pick(c.callBtn, lang)}
+                </a>
+              </div>
+
+              {/* Email Card */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-sky-50 border border-sky-100">
+                <div className="flex items-center gap-4 min-w-0">
+                  <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xl flex-shrink-0">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-bold text-sm text-black truncate">{pick(c.email, lang)}</p>
+                    <p className="text-gray-500 text-xs mt-0.5 truncate max-w-[180px] sm:max-w-xs">info@shifapropertiesltdgroup.com</p>
+                  </div>
+                </div>
+                <a href="mailto:info@shifapropertiesltdgroup.com" className="text-white text-xs font-bold px-5 py-2.5 rounded-xl flex-shrink-0 text-center shadow-sm bg-black hover:bg-neutral-800 transition-colors">
+                  {pick(c.emailBtn, lang)}
+                </a>
+              </div>
+
+              {/* WhatsApp Card */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-sky-50 border border-sky-100">
+                <div className="flex items-center gap-4 min-w-0">
+                  <div className="w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xl flex-shrink-0">
+                    <MessageSquare className="w-5 h-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-bold text-sm text-black truncate">{pick(c.whatsapp, lang)}</p>
+                    <p className="text-gray-500 text-xs mt-0.5">01877715333</p>
+                  </div>
+                </div>
+                <a href="https://wa.me/8801877715333" target="_blank" rel="noopener noreferrer"
+                  className="text-white text-xs font-bold px-5 py-2.5 rounded-xl flex-shrink-0 text-center shadow-sm bg-black hover:bg-neutral-800 transition-colors">
+                  {pick(c.waBtn, lang)}
+                </a>
+              </div>
+
+              {/* Careers Card */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-sky-50 border border-sky-100">
+                <div className="flex items-center gap-4 min-w-0">
+                  <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xl flex-shrink-0">
+                    <Briefcase className="w-5 h-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-bold text-sm text-black truncate">{pick(c.career, lang)}</p>
+                    <p className="text-gray-500 text-xs mt-0.5 truncate max-w-[180px] sm:max-w-xs">career@shifapropertiesltdgroup.com</p>
+                  </div>
+                </div>
+                <a href="mailto:career@shifapropertiesltdgroup.com" className="text-white text-xs font-bold px-5 py-2.5 rounded-xl flex-shrink-0 text-center shadow-sm bg-black hover:bg-neutral-800 transition-colors">
+                  {pick(c.emailBtn, lang)}
+                </a>
+              </div>
+
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* ── OFFICE LOCATIONS ── */}
+      <div className="py-16 px-4" style={{ background: '#e8f4fd' }}>
+        <div className="max-w-7xl mx-auto">
+          <motion.h2 className="text-center font-black text-2xl md:text-3xl mb-12 text-black"
+            style={{ fontFamily: 'Playfair Display, serif' }}
+            variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-100px' }}>
+            {pick(c.officesTitle, lang)}
+          </motion.h2>
+
+          <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-100px' }}>
+            {OFFICES.map((office) => (
+              <motion.div key={office.name} variants={fadeInUp}
+                className="bg-white rounded-2xl overflow-hidden shadow border border-sky-100 hover:shadow-lg transition-shadow duration-300 flex flex-col justify-between">
+                <div>
+                  <div className="relative h-40 bg-sky-50 overflow-hidden">
+                    <iframe src={office.mapEmbed} width="100%" height="100%" style={{ border: 0 }}
+                      allowFullScreen={false} loading="lazy" referrerPolicy="no-referrer-when-downgrade"
+                      title={office.name} className="w-full h-full" />
+                    <a href={office.mapUrl} target="_blank" rel="noopener noreferrer"
+                      className="absolute top-2 left-2 bg-white text-xs font-bold px-3 py-1 rounded-full shadow flex items-center gap-1 text-black">
+                      <MapPin className="w-3 h-3 text-black" />
+                      {pick(c.mapsLink, lang)}
+                    </a>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="font-black text-sm text-center mb-4 uppercase tracking-wide text-black">{office.name}</h3>
+                    <div className="space-y-2 text-xs">
+                      <div className="flex gap-2">
+                        <span className="text-gray-400 w-16 flex-shrink-0">{pick(c.addressLabel, lang)}</span>
+                        <span className="text-gray-700">{office.address}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <span className="text-gray-400 w-16 flex-shrink-0">{pick(c.emailLabel, lang)}</span>
+                        <a href={`mailto:${office.email}`} className="text-neutral-900 font-semibold hover:underline truncate">{office.email}</a>
+                      </div>
+                      <div className="flex gap-2">
+                        <span className="text-gray-400 w-16 flex-shrink-0">{pick(c.cellLabel, lang)}</span>
+                        <a href={`tel:${office.cell}`} className="text-gray-700 hover:text-black font-medium">{office.cell}</a>
+                      </div>
+                      <div className="flex gap-2">
+                        <span className="text-gray-400 w-16 flex-shrink-0">{pick(c.hotlineLabel, lang)}</span>
+                        <a href={`tel:${office.hotline}`} className="text-gray-700 hover:text-black font-medium">{office.hotline}</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="px-5 pb-5">
+                  <a href={office.mapUrl} target="_blank" rel="noopener noreferrer"
+                    className="block w-full text-center text-sm font-bold py-2 rounded-full border-2 border-black text-black bg-transparent hover:bg-black hover:text-white transition-all duration-200">
+                    {pick(c.viewMap, lang)}
+                  </a>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </div>
+
+      {/* ── INQUIRY FORM ── */}
+      <div className="py-16 px-4 bg-white border-t border-sky-100">
+        <div className="max-w-4xl mx-auto">
+          <motion.div className="bg-sky-50/50 rounded-3xl p-8 md:p-12 border border-sky-100 shadow-sm relative overflow-hidden"
+            variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-100px' }}>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gold-200/20 rounded-full blur-2xl" />
+            <div className="absolute -bottom-10 -left-10 w-44 h-44 bg-blue-200/20 rounded-full blur-3xl" />
+
+            <div className="relative z-10">
+              <h2 className="text-center font-black text-2xl md:text-3xl mb-2 text-black" style={{ fontFamily: 'Playfair Display, serif' }}>
+                {pick(c.formTitle, lang)}
+              </h2>
+              <p className="text-center text-gray-500 text-sm mb-10 max-w-lg mx-auto">{pick(c.formSubtitle, lang)}</p>
+
+              {submitted ? (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center text-3xl mb-4 text-green-600">✓</div>
+                  <h3 className="font-extrabold text-xl mb-2 text-black">{pick(c.thankYou, lang)}</h3>
+                  <p className="text-gray-600 text-sm max-w-sm">{pick(c.thankYouMsg, lang)}</p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-black">{pick(c.nameLabel, lang)}</label>
+                      <input type="text" name="name" required value={formData.name} onChange={handleInputChange}
+                        placeholder={pick(c.namePlaceholder, lang)}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-black">{pick(c.phoneLabel, lang)}</label>
+                      <input type="tel" name="phone" required value={formData.phone} onChange={handleInputChange}
+                        placeholder={pick(c.phonePlaceholder, lang)}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-black">{pick(c.emailInputLabel, lang)}</label>
+                      <input type="email" name="email" required value={formData.email} onChange={handleInputChange}
+                        placeholder={pick(c.emailPlaceholder, lang)}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all" />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="md:col-span-1 space-y-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-black">{pick(c.interestLabel, lang)}</label>
+                      <select name="subject" value={formData.subject} onChange={handleInputChange}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all appearance-none cursor-pointer"
+                        style={{ backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>")`, backgroundPosition: 'right 12px center', backgroundRepeat: 'no-repeat', backgroundSize: '16px' }}>
+                        {c.interests.map((item, i) => (
+                          <option key={i} value={INTEREST_VALUES[i]}>{pick(item, lang)}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="md:col-span-2 space-y-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-black">{pick(c.msgLabel, lang)}</label>
+                      <textarea name="message" required rows={1} value={formData.message} onChange={handleInputChange}
+                        placeholder={pick(c.msgPlaceholder, lang)}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all resize-y min-h-[46px]" />
+                    </div>
+                  </div>
+
+                  <div className="text-center pt-2">
+                    <button
+                      type="submit"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-900 via-blue-700 to-sky-500 hover:from-blue-950 hover:to-sky-600 text-white px-14 py-3.5 text-xs font-black uppercase tracking-wider shadow-md hover:shadow-lg transition-all duration-300 rounded-full transform hover:scale-[1.01]"
+                    >
+                      <span>{pick(c.sendBtn, lang)}</span>
+                      <span className="text-sm font-light select-none">→</span>
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default ContactSection;

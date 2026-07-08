@@ -1,0 +1,480 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ──────────────────────────────────────────────────────────────────
+   CSS Custom Properties  — STRICT PALETTE
+   White · Navy Blue · Gold (buttons only) · #000000 · #1a1a1a
+────────────────────────────────────────────────────────────────── */
+:root {
+  /* Core palette */
+  --color-bg: #ffffff;
+  /* page background          */
+  --color-primary: #1a237e;
+  /* navy blue – primary       */
+  --color-gold: #C9A84C;
+  /* gold – buttons only       */
+  --color-black: #000000;
+  /* deep black                */
+  --color-dark: #1a1a1a;
+  /* soft black for body text  */
+
+  /* Neutral helpers (white / near-white dividers only) */
+  --color-divider: #e8e8e8;
+  /* thin rule lines           */
+  --color-muted: #6b7280;
+  /* secondary / caption text  */
+  --color-surface: #f7f8fc;
+  /* very faint off-white bg   */
+
+  /* Shadows */
+  --shadow-card: 0 2px 16px rgba(0, 0, 0, 0.07);
+  --shadow-card-lg: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --shadow-navy: 0 4px 24px rgba(26, 35, 126, 0.18);
+  --shadow-gold: 0 4px 20px rgba(201, 168, 76, 0.35);
+
+  /* Border radius */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  /* Transition */
+  --transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Base Reset ─────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Poppins', system-ui, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-dark);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ── Typography Scale ───────────────────────────────────────────── */
+
+/* Section headings — Playfair Display for elegance */
+h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', Georgia, serif;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-black);
+}
+
+/* Hero title h1 — Poppins 600, geometric & smooth */
+h1 {
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-weight: 600;
+  line-height: 1.15;
+  font-size: clamp(2rem, 5vw, 4rem);
+  letter-spacing: -0.02em;
+  color: var(--color-black);
+}
+
+h2 {
+  font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+}
+
+h3 {
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+}
+
+h4 {
+  font-size: clamp(1rem, 2vw, 1.35rem);
+}
+
+h5 {
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+}
+
+/* Paragraphs — Poppins 400 Regular */
+p {
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(0.9rem, 1.2vw, 1rem);
+  line-height: 1.75;
+  color: var(--color-dark);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ── Reusable Component Classes ─────────────────────────────────── */
+@layer components {
+
+  /* ── Container ── */
+  .gs-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* ── Section ── */
+  .gs-section {
+    @apply py-16 md:py-24;
+    background-color: var(--color-bg);
+  }
+
+  /* Alternate section background (very subtle off-white) */
+  .gs-section-alt {
+    @apply py-16 md:py-24;
+    background-color: var(--color-surface);
+  }
+
+  /* ──────────────────────────────────────────────────────────────
+     BUTTONS
+     Gold is ONLY used here. Nowhere else should --color-gold appear
+     except the btn-gold and btn-gold-outline variants.
+  ────────────────────────────────────────────────────────────── */
+
+  /* Primary navy button */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-white text-sm tracking-wide transition-all duration-300 cursor-pointer select-none border-0;
+    background-color: var(--color-primary);
+    box-shadow: var(--shadow-navy);
+  }
+
+  .btn-primary:hover {
+    background-color: #232d9b;
+    /* slightly lighter navy */
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(26, 35, 126, 0.32);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  /* Gold button – only for key CTAs (Book, Reserve, etc.) */
+  .btn-gold {
+    @apply inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm tracking-wide transition-all duration-300 cursor-pointer select-none border-0;
+    background-color: var(--color-gold);
+    color: var(--color-black);
+    box-shadow: var(--shadow-gold);
+  }
+
+  .btn-gold:hover {
+    background-color: #b8960e;
+    /* darker gold on hover */
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(201, 168, 76, 0.50);
+  }
+
+  .btn-gold:active {
+    transform: translateY(0);
+  }
+
+  /* Outline navy button */
+  .btn-outline {
+    @apply inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm tracking-wide border-2 transition-all duration-300 cursor-pointer select-none;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: transparent;
+  }
+
+  .btn-outline:hover {
+    background-color: var(--color-primary);
+    color: #ffffff;
+    transform: translateY(-2px);
+  }
+
+  /* ── Section Labels / Headings ── */
+
+  /* Small upper label (e.g. "SIMPLE FLOW") — navy */
+  .section-label {
+    @apply inline-flex items-center gap-2 text-xs font-semibold tracking-[0.18em] uppercase mb-3;
+    color: var(--color-primary);
+  }
+
+  /* Thin navy left-border accent beside label */
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 28px;
+    height: 2px;
+    background-color: var(--color-primary);
+    border-radius: 2px;
+  }
+
+  .section-title {
+    @apply mb-4;
+    color: var(--color-black);
+  }
+
+  .section-subtitle {
+    @apply text-base max-w-2xl;
+    color: var(--color-muted);
+  }
+
+  /* ── Card ── */
+  .gs-card {
+    @apply bg-white rounded-2xl overflow-hidden transition-all duration-300;
+    border: 1px solid var(--color-divider);
+    box-shadow: var(--shadow-card);
+  }
+
+  .gs-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-card-lg);
+    border-color: #d0d5e8;
+    /* very subtle navy tint */
+  }
+
+  /* ── Navy divider (replaces gold divider in most places) ── */
+  .navy-divider {
+    @apply w-12 h-0.5 rounded-full my-4;
+    background-color: var(--color-primary);
+  }
+
+  /* Gold divider – use SPARINGLY (hero only) */
+  .gold-divider {
+    @apply w-12 h-0.5 rounded-full my-4;
+    background-color: var(--color-gold);
+  }
+
+  /* ── Glassmorphism (dark navy overlay, e.g. hero overlays) ── */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: var(--radius-md);
+  }
+
+  /* ── Image overlay zoom ── */
+  .img-overlay {
+    @apply relative overflow-hidden;
+  }
+
+  .img-overlay img {
+    @apply w-full h-full object-cover transition-transform duration-700;
+  }
+
+  .img-overlay:hover img {
+    transform: scale(1.05);
+  }
+
+  /* ── Badge ── */
+  .gs-badge {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold;
+    background: rgba(26, 35, 126, 0.08);
+    color: var(--color-primary);
+    border: 1px solid rgba(26, 35, 126, 0.18);
+  }
+
+  /* ── Step number (01, 02, 03 style) ── */
+  .step-number {
+    @apply text-xs font-semibold tracking-widest mb-1;
+    color: var(--color-muted);
+  }
+
+  /* ── Step icon circle (navy ring) ── */
+  .step-icon {
+    @apply inline-flex items-center justify-center w-11 h-11 rounded-full;
+    background: rgba(26, 35, 126, 0.07);
+    color: var(--color-primary);
+    border: 1.5px solid rgba(26, 35, 126, 0.18);
+  }
+
+  /* ── Horizontal rule ── */
+  .gs-rule {
+    border: none;
+    border-top: 1px solid var(--color-divider);
+  }
+
+  /* ── Navy hero / dark section ── */
+  .gs-dark-section {
+    @apply py-16 md:py-24;
+    background-color: var(--color-primary);
+    color: #ffffff;
+  }
+
+  .gs-dark-section h1,
+  .gs-dark-section h2,
+  .gs-dark-section h3,
+  .gs-dark-section h4,
+  .gs-dark-section h5,
+  .gs-dark-section h6 {
+    color: #ffffff;
+  }
+
+  .gs-dark-section p {
+    color: rgba(255, 255, 255, 0.75);
+  }
+}
+
+/* ── Scrollbar ──────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 4px;
+}
+
+/* ── Text selection ─────────────────────────────────────────────── */
+::selection {
+  background: rgba(26, 35, 126, 0.15);
+  color: var(--color-black);
+}
+
+/* ── Animations ─────────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-36px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideRight {
+  from {
+    opacity: 0;
+    transform: translateX(36px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Animation utility classes */
+.animate-fade-up {
+  animation: fadeUp 0.65s ease both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.75s ease both;
+}
+
+.animate-slide-left {
+  animation: slideLeft 0.65s ease both;
+}
+
+.animate-slide-right {
+  animation: slideRight 0.65s ease both;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.delay-100 {
+  animation-delay: 0.1s;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-300 {
+  animation-delay: 0.3s;
+}
+
+.delay-400 {
+  animation-delay: 0.4s;
+}
+
+.delay-500 {
+  animation-delay: 0.5s;
+}
+
+/* ── Gradient text utilities ────────────────────────────────────── */
+
+/* Navy solid text (default) */
+.text-navy {
+  color: var(--color-primary);
+}
+
+/* Gold shimmer – ONLY for hero highlight word (use sparingly) */
+.text-gold-shimmer {
+  background: linear-gradient(90deg, #C9A84C 0%, #e2c97e 45%, #C9A84C 90%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3.5s linear infinite;
+}
+
+/* ── Responsive utilities ───────────────────────────────────────── */
+@media (max-width: 640px) {
+
+  .gs-section,
+  .gs-section-alt {
+    @apply py-12;
+  }
+}
