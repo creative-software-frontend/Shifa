@@ -5,30 +5,7 @@ import groupImg from '../assets/image/6fa3ef6e-c22d-45b6-a859-b2108f8af13c.jfif'
 import PageTransition from '../components/PageTransition';
 import PageHero from '../components/PageHero';
 import { useLanguage } from '../context/LanguageContext';
-
-const JOBS_LIST = [
-  {
-    id: 1,
-    role: { en: 'Assistant Manager - Business Development', bn: 'সহকারী ব্যবস্থাপক - ব্যবসা উন্নয়ন' },
-    department: { en: 'Marketing & Sales', bn: 'মার্কেটিং ও সেলস' },
-    deadline: { en: 'Aug 15, 2026', bn: '১৫ আগস্ট, ২০২৬' },
-    location: { en: 'Dhaka Head Office', bn: 'ঢাকা হেড অফিস' },
-  },
-  {
-    id: 2,
-    role: { en: 'Executive - Digital Marketing & PR', bn: 'নির্বাহী - ডিজিটাল মার্কেটিং ও পিআর' },
-    department: { en: 'IT & Branding', bn: 'আইটি ও ব্র্যান্ডিং' },
-    deadline: { en: 'Aug 20, 2026', bn: '২০ আগস্ট, ২০২৬' },
-    location: { en: 'Dhaka Head Office', bn: 'ঢাকা হেড অফিস' },
-  },
-  {
-    id: 3,
-    role: { en: 'Customer Relations Executive', bn: 'কাস্টমার রিলেশনস এক্সিকিউটিভ' },
-    department: { en: 'CRM & Accounts', bn: 'সিআরএম ও একাউন্টস' },
-    deadline: { en: 'Aug 25, 2026', bn: '২৫ আগস্ট, ২০২৬' },
-    location: { en: 'Dhaka Head Office', bn: 'ঢাকা হেড অফিস' },
-  },
-];
+import { useJobs, type Job } from '../hooks/useJobs';
 
 // Architectural Fluid Floating Keyframe Constants
 const fluidFloatVariants: Variants = {
@@ -57,9 +34,13 @@ const secondaryFloatVariants: Variants = {
 
 const CareerPage: React.FC = () => {
   const { lang } = useLanguage();
-  const pick = (obj: { en: string; bn: string }) => lang === 'EN' ? obj.en : obj.bn;
+  const pick = (obj: { en: string; bn: string } | string) => {
+    if (typeof obj === 'string') return obj;
+    return lang === 'EN' ? obj.en : obj.bn;
+  };
 
-  const [selectedJob, setSelectedJob] = useState<typeof JOBS_LIST[0] | null>(null);
+  const { jobs: JOBS_LIST } = useJobs();
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -68,7 +49,7 @@ const CareerPage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
-  const handleApplyClick = (job: typeof JOBS_LIST[0]) => {
+  const handleApplyClick = (job: Job) => {
     setSelectedJob(job);
     setSubmitSuccess(false);
     setIsDrawerOpen(true);
