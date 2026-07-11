@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { PROJECTS } from '../../data/landingData';
 import type { Project } from '../../types';
 import { useLanguage } from '../../context/LanguageContext';
+import { getProjectImage } from '../../utils/imageUrl';
 
 type Filter = 'All' | 'Hotel' | 'Apartment' | 'Land';
 
@@ -82,7 +83,7 @@ const filtered = activeFilter === 'All'
             >
               {/* Image & Tags display */}
               <div className="relative h-64 md:h-72 overflow-hidden">
-                <img src={project.image} alt={project.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-104" />
+                <img src={getProjectImage(project)} alt={project.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-104" />
 
                 <div className="absolute top-4 left-4 flex gap-2">
                   <span className="px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase text-white"
@@ -154,7 +155,7 @@ const filtered = activeFilter === 'All'
           <div className="bg-white rounded-3xl overflow-hidden max-w-2xl w-full shadow-2xl animate-fade-up"
             onClick={(e) => e.stopPropagation()}>
             <div className="relative h-64">
-              <img src={selected.image} alt={selected.name} className="w-full h-full object-cover" />
+              <img src={getProjectImage(selected)} alt={selected.name} className="w-full h-full object-cover" />
               <button onClick={() => setSelected(null)}
                 className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/40 text-white
                            flex items-center justify-center hover:bg-black/60 transition-colors font-bold text-sm">

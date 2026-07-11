@@ -4,6 +4,7 @@ import type { Project } from '../types';
 import PageTransition from '../components/PageTransition';
 import { useLanguage } from '../context/LanguageContext';
 import { useProjects } from '../hooks/useProjects';
+import { getProjectImage } from '../utils/imageUrl';
 
 type Filter = 'All' | 'Hotel' | 'Apartment' | 'Land';
 
@@ -172,7 +173,7 @@ const ProjectsPage: React.FC = () => {
 
                   <img
 
-                    src={project.image || ''}
+                    src={getProjectImage(project)}
 
                     alt={project.title ?? project.name}
 
@@ -371,7 +372,7 @@ const ProjectsPage: React.FC = () => {
 
             <img
 
-              src={selected.image || ''}
+              src={getProjectImage(selected)}
 
               alt={selected.title}
 
