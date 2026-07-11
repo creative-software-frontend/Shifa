@@ -10,9 +10,35 @@ const HeroSection: React.FC = () => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const { lang } = useLanguage();
   const { banners } = useBanners();
+  useEffect(() => {
+  if (!banners.length) return;
+
+  const preload = document.createElement('link');
+  preload.rel = 'preload';
+  preload.as = 'image';
+  preload.href = banners[0].image;
+
+  document.head.appendChild(preload);
+
+  return () => {
+    document.head.removeChild(preload);
+  };
+}, [banners]);
 
 
-  const slideData = banners[current] ?? { image: '', title: '', ctaLink: '', id: 0, cta: {} };
+  const safeIndex =
+  banners.length > 0
+    ? current % banners.length
+    : 0;
+
+const slideData = banners[safeIndex] ?? {
+  image: '',
+  title: '',
+  description: '',
+  ctaLink: '',
+  id: 0,
+  cta: {}
+};
 
 
 
@@ -24,10 +50,15 @@ const HeroSection: React.FC = () => {
     setTimeout(() => { setCurrent(idx); setAnimating(false); }, 400);
   };
 
-  const next = () => goTo((current + 1) % banners.length);
-  const prev = () => goTo(
-    (current - 1 + banners.length) % banners.length
-  );
+  const next = () => {
+  if (banners.length === 0) return;
+  goTo((current + 1) % banners.length);
+};
+
+const prev = () => {
+  if (banners.length === 0) return;
+  goTo((current - 1 + banners.length) % banners.length);
+};
 
   useEffect(() => {
     intervalRef.current = setInterval(next, 6000);
@@ -46,7 +77,7 @@ const HeroSection: React.FC = () => {
       {/* ── Background image ── */}
       <AnimatePresence initial={false}>
         <motion.div
-          key={`bg-${current}`}
+          key={`bg-${safeIndex}`}
           className="absolute inset-0"
           initial={{ opacity: 0, scale: 1.04 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -59,6 +90,7 @@ const HeroSection: React.FC = () => {
             alt={slideData.title}
             className="w-full h-full object-cover"
             loading="eager"
+            fetchPriority="high"
           />
         </motion.div>
       </AnimatePresence>
@@ -67,7 +99,7 @@ const HeroSection: React.FC = () => {
       <div className="absolute top-[32%] md:top-[28%] left-0 right-0 z-20 flex flex-col items-center px-4">
         <AnimatePresence mode="wait">
           <motion.div
-            key={`content-${current}-${lang}`}
+            key={`content-${safeIndex}-${lang}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
@@ -124,7 +156,7 @@ const HeroSection: React.FC = () => {
                 textShadow: '0px 2px 14px rgba(0, 0, 0, 0.60), 0px 1px 4px rgba(0, 0, 0, 0.40)',
               }}
             >
-              {slideData.title}
+              {slideData.description}
             </motion.p>
 
             {/* CTA buttons */}
@@ -183,9 +215,9 @@ const HeroSection: React.FC = () => {
             aria-label={`Go to slide ${i + 1}`}
             className="rounded-full transition-all duration-300"
             style={{
-              width: i === current ? '28px' : '8px',
+              width: i === safeIndex ? '28px' : '8px',
               height: '8px',
-              backgroundColor: i === current ? '#C9A84C' : 'rgba(255,255,255,0.6)',
+              backgroundColor: i === safeIndex ? '#C9A84C' : 'rgba(255,255,255,0.6)',
             }}
           />
         ))}
@@ -195,7 +227,7 @@ const HeroSection: React.FC = () => {
       <div className="absolute bottom-6 right-8 z-30 hidden md:flex items-center gap-1.5">
         <span className="text-white font-semibold text-sm tabular-nums"
           style={{ textShadow: '0 1px 6px rgba(0,0,0,0.6)' }}>
-          {String(current + 1).padStart(2, '0')}
+          {String(safeIndex + 1).padStart(2, '0')}
         </span>
         <span className="text-white/50 text-xs">/</span>
         <span className="text-white/60 text-xs tabular-nums">
@@ -243,7 +275,7 @@ const HeroSection: React.FC = () => {
       {/* ── Gold progress bar ── */}
       <div className="absolute bottom-0 left-0 right-0 z-30 h-0.5 bg-white/20">
         <motion.div
-          key={`bar-${current}`}
+          key={`bar-${safeIndex}`}
           className="h-full"
           style={{ backgroundColor: '#C9A84C' }}
           initial={{ width: '0%' }}
