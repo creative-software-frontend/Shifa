@@ -13,62 +13,67 @@ import {
   Globe
 } from 'lucide-react';
 import { useLogos } from "../hooks/useLogos";
+import { useSocialLinks } from "../hooks/useSocialLinks";
 import { useLanguage } from '../context/LanguageContext';
 import { UI, pick } from '../data/translations';
 
 // Inline pure SVGs for social elements to safeguard against third-party library export variances
-const SOCIALS = [
-  {
-    id: 'fb',
-    label: 'Facebook',
-    icon: (
-      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
-      </svg>
-    ),
-    href: 'https://facebook.com',
-    color: 'hover:bg-[#1877F2] hover:border-[#1877F2]'
-  },
-  {
-    id: 'ig',
-    label: 'Instagram',
-    icon: (
-      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-        <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01" />
-      </svg>
-    ),
-    href: 'https://instagram.com',
-    color: 'hover:bg-[#E4405F] hover:border-[#E4405F]'
-  },
-  {
-    id: 'li',
-    label: 'LinkedIn',
-    icon: (
-      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-      </svg>
-    ),
-    href: 'https://linkedin.com',
-    color: 'hover:bg-[#0A66C2] hover:border-[#0A66C2]'
-  },
-  {
-    id: 'yt',
-    label: 'YouTube',
-    icon: (
-      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93 .502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-      </svg>
-    ),
-    href: 'https://youtube.com',
-    color: 'hover:bg-[#FF0000] hover:border-[#FF0000]'
-  },
+const FacebookIcon = (
+  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+  </svg>
+);
+const InstagramIcon = (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01" />
+  </svg>
+);
+const LinkedInIcon = (
+  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+  </svg>
+);
+const YouTubeIcon = (
+  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93 .502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+  </svg>
+);
+
+// Maps a backend platform slug to its inline SVG icon + hover color.
+const SOCIAL_PLATFORM_MAP: Record<
+  string,
+  { icon: React.ReactNode; color: string }
+> = {
+  facebook: { icon: FacebookIcon, color: 'hover:bg-[#1877F2] hover:border-[#1877F2]' },
+  instagram: { icon: InstagramIcon, color: 'hover:bg-[#E4405F] hover:border-[#E4405F]' },
+  linkedin: { icon: LinkedInIcon, color: 'hover:bg-[#0A66C2] hover:border-[#0A66C2]' },
+  youtube: { icon: YouTubeIcon, color: 'hover:bg-[#FF0000] hover:border-[#FF0000]' },
+};
+
+// Fallback used when the backend returns no active links.
+const FALLBACK_SOCIALS = [
+  { id: 'fb', label: 'Facebook', href: 'https://facebook.com', platform: 'facebook' },
+  { id: 'ig', label: 'Instagram', href: 'https://instagram.com', platform: 'instagram' },
+  { id: 'li', label: 'LinkedIn', href: 'https://linkedin.com', platform: 'linkedin' },
+  { id: 'yt', label: 'YouTube', href: 'https://youtube.com', platform: 'youtube' },
 ];
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
   const { lang } = useLanguage();
-const { footerLogo } = useLogos();
+  const { footerLogo } = useLogos();
+  const { socialLinks } = useSocialLinks();
+
+  // Use backend links when available; otherwise fall back to the static set.
+  const SOCIALS = socialLinks.length
+    ? socialLinks.map((link) => ({
+        id: link.id,
+        label: link.platform,
+        href: link.url,
+        platform: link.platform,
+      }))
+    : FALLBACK_SOCIALS;
   const CONTACT_INFO = [
     {
       icon: MapPin,
@@ -173,9 +178,9 @@ const { footerLogo } = useLogos();
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={s.label}
-                    className={`w-9 h-9 rounded-xl flex items-center justify-center text-slate-200 hover:text-white transition-all duration-300 border border-slate-700 bg-slate-900/60 backdrop-blur-sm shadow-inner ${s.color}`}
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center text-slate-200 hover:text-white transition-all duration-300 border border-slate-700 bg-slate-900/60 backdrop-blur-sm shadow-inner ${SOCIAL_PLATFORM_MAP[s.platform]?.color ?? 'hover:bg-[#C9A84C] hover:border-[#C9A84C]'}`}
                   >
-                    {s.icon}
+                    {SOCIAL_PLATFORM_MAP[s.platform]?.icon ?? FacebookIcon}
                   </a>
                 ))}
               </div>
