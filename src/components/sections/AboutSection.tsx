@@ -4,6 +4,7 @@ import img2 from '../../assets/image/6fa3ef6e-c22d-45b6-a859-b2108f8af13c.jfif';
 import { Counter } from '../ui/Counter';
 import { useLanguage } from '../../context/LanguageContext';
 import { UI, pick } from '../../data/translations';
+import { useSisterConcerns } from '../../hooks/useSisterConcerns';
 
 const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 25 },
@@ -25,6 +26,12 @@ const staggerContainer: Variants = {
 const AboutSection: React.FC = () => {
   const { lang } = useLanguage();
   const a = UI.about;
+  const { sisterConcerns } = useSisterConcerns();
+
+  // Use backend data when available; otherwise fall back to the static set.
+  const concerns = sisterConcerns.length
+    ? sisterConcerns.map((c) => ({ name: c.title, sub: c.description }))
+    : a.sisterConcerns;
 
   return (
     /* Changed overflow-hidden to visible to let the metric card float freely outside the block boundaries */
@@ -197,7 +204,7 @@ const AboutSection: React.FC = () => {
             whileInView="visible"
             viewport={{ once: true, margin: '-100px' }}
           >
-            {a.sisterConcerns.map((item, i) => (
+            {concerns.map((item, i) => (
               <motion.div
                 key={i}
                 variants={fadeInUp}
@@ -219,9 +226,9 @@ const AboutSection: React.FC = () => {
                   className="font-semibold text-sm mb-2 leading-snug transition-colors duration-200 group-hover:text-amber-600"
                   style={{ color: 'var(--color-dark, #1a237e)' }}
                 >
-                  {pick(item.name, lang)}
+                  {item.name}
                 </h3>
-                <p className="text-gray-500 text-xs leading-relaxed">{pick(item.sub, lang)}</p>
+                <p className="text-gray-500 text-xs leading-relaxed">{item.sub}</p>
               </motion.div>
             ))}
           </motion.div>
