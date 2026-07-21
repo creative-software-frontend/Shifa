@@ -37,8 +37,14 @@ const TestimonialsSection: React.FC = () => {
               key={t.id}
               onClick={() => setActive(idx)}
               variants={fadeInUp}
-              className={`gs-card p-6 cursor-pointer transition-all duration-300 ${active === idx ? 'ring-2 ring-[#C9A84C] scale-[1.02]' : ''}`}
+              className={`gs-card relative p-6 cursor-pointer transition-all duration-300 ${active === idx ? 'ring-2 ring-[#C9A84C] scale-[1.02]' : ''}`}
             >
+              <div className="mb-4">
+                <span className="inline-block px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase shadow-sm"
+                  style={{ background: 'linear-gradient(135deg,#C9A84C,#fde68a)', color: '#0D0D1A' }}>
+                  ✦ New
+                </span>
+              </div>
               {(t as { badge?: string }).badge && (
                 <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold mb-4 tracking-wider uppercase"
                   style={{ background: 'linear-gradient(135deg,#C9A84C,#fde68a)', color: '#0D0D1A' }}>
@@ -47,14 +53,14 @@ const TestimonialsSection: React.FC = () => {
               )}
 
 
-              <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center gap-3 mb-4 mt-2">
                 <img src={t.image ? getImageUrl(t.image) : `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                  t.model
+                  t.name
                 )}&background=1a237e&color=fff&size=80`}
-                  alt={t.model} className="w-12 h-12 rounded-full object-cover ring-2 ring-[#C9A84C]" />
+                  alt={t.name} className="w-12 h-12 rounded-full object-cover ring-2 ring-[#C9A84C]" />
                 <div>
-                  <h4 className="font-bold text-sm text-slate-900">{t.model}</h4>
-                  <p className="text-xs text-slate-500">{t.name}</p>
+                  <h4 className="font-bold text-sm text-slate-900">{t.name}</h4>
+                  <p className="text-xs text-slate-500">{t.model}{t.company ? `, ${t.company}` : ''}</p>
                 </div>
               </div>
               <div className="flex gap-0.5 mb-3">

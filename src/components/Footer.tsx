@@ -190,45 +190,83 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Expanded Grid System Matrix */}
-          <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-            {footerInfo?.office_name && (
-              <p className="sm:col-span-2 text-xs uppercase tracking-[0.2em] font-bold text-[#C9A84C] mb-1">
-                {footerInfo.office_name}
-              </p>
-            )}
-            {CONTACT_INFO.map((item, idx) => {
-              const IconComponent = item.icon;
-              const isLink = !!item.href;
-              const Wrapper = isLink ? 'a' : 'div';
+          <div className="lg:col-span-8 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            {/* Contact Details Left/Top */}
+            <div className="lg:col-span-2 flex flex-col justify-center">
+              {footerInfo?.office_name && (
+                <p className="text-xs uppercase tracking-[0.2em] font-bold text-[#C9A84C] mb-4">
+                  {footerInfo.office_name}
+                </p>
+              )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {CONTACT_INFO.map((item, idx) => {
+                  const IconComponent = item.icon;
+                  const isLink = !!item.href;
+                  const Wrapper = isLink ? 'a' : 'div';
 
-              return (
-                <Wrapper
-                  key={idx}
-                  {...(isLink ? { href: item.href, target: item.href?.startsWith('http') ? '_blank' : undefined, rel: 'noopener noreferrer' } : {})}
-                  className={`flex gap-4 p-3.5 rounded-xl transition-all duration-200 border ${item.highlight
-                    ? 'bg-[#C9A84C]/10 border-[#C9A84C]/40 hover:bg-[#C9A84C]/20'
-                    : 'border-transparent hover:bg-slate-50 hover:border-slate-200'
-                    } ${isLink ? 'group/card cursor-pointer' : ''} ${item.title.includes('Office Hours') || item.title.includes('অফিসের সময়') ? 'sm:col-span-2' : ''}`}
-                >
-                  <div className={`flex-shrink-0 w-10 h-10 rounded-xl border flex items-center justify-center transition-transform group-hover/card:scale-105 ${item.highlight
-                    ? 'bg-gradient-to-br from-[#C9A84C]/30 to-[#C9A84C]/10 border-[#C9A84C]/50 text-[#C9A84C]'
-                    : 'bg-gradient-to-br from-slate-100 to-slate-50 border-slate-200 text-[#C9A84C]'
-                    }`}>
-                    <IconComponent className="w-5 h-5" />
-                  </div>
-                  <div className="space-y-0.5">
-                    <h5 className="text-[11px] font-bold uppercase tracking-wider text-slate-600">{item.title}</h5>
-                    <p className={`text-xs leading-normal font-semibold ${item.highlight
-                      ? 'text-slate-900 font-bold flex items-center gap-1'
-                      : isLink ? 'text-slate-700 group-hover/card:text-slate-900 transition-colors flex items-center gap-1' : 'text-slate-600'
-                      }`}>
-                      {item.value}
-                      {isLink && <ArrowUpRight className="w-3 h-3 opacity-0 group-hover/card:opacity-100 transition-all text-[#C9A84C]" />}
-                    </p>
-                  </div>
-                </Wrapper>
-              );
-            })}
+                  return (
+                    <Wrapper
+                      key={idx}
+                      {...(isLink ? { href: item.href, target: item.href?.startsWith('http') ? '_blank' : undefined, rel: 'noopener noreferrer' } : {})}
+                      className={`flex gap-4 p-3.5 rounded-xl transition-all duration-200 border ${item.highlight
+                        ? 'bg-[#C9A84C]/10 border-[#C9A84C]/40 hover:bg-[#C9A84C]/20'
+                        : 'border-transparent hover:bg-slate-50 hover:border-slate-200'
+                        } ${isLink ? 'group/card cursor-pointer' : ''} ${item.title.includes('Office Hours') || item.title.includes('অফিসের সময়') ? 'sm:col-span-2' : ''}`}
+                    >
+                      <div className={`flex-shrink-0 w-10 h-10 rounded-xl border flex items-center justify-center transition-transform group-hover/card:scale-105 ${item.highlight
+                        ? 'bg-gradient-to-br from-[#C9A84C]/30 to-[#C9A84C]/10 border-[#C9A84C]/50 text-[#C9A84C]'
+                        : 'bg-gradient-to-br from-slate-100 to-slate-50 border-slate-200 text-[#C9A84C]'
+                        }`}>
+                        <IconComponent className="w-5 h-5" />
+                      </div>
+                      <div className="space-y-0.5">
+                        <h5 className="text-[11px] font-bold uppercase tracking-wider text-slate-600">{item.title}</h5>
+                        <p className={`text-xs leading-normal font-semibold ${item.highlight
+                          ? 'text-slate-900 font-bold flex items-center gap-1'
+                          : isLink ? 'text-slate-700 group-hover/card:text-slate-900 transition-colors flex items-center gap-1' : 'text-slate-600'
+                          }`}>
+                          {item.value}
+                          {isLink && <ArrowUpRight className="w-3 h-3 opacity-0 group-hover/card:opacity-100 transition-all text-[#C9A84C]" />}
+                        </p>
+                      </div>
+                    </Wrapper>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Map Block Right/Bottom */}
+            {footerInfo?.map_url && (
+              <div className="lg:col-span-1 w-full min-h-[250px] rounded-xl overflow-hidden border border-slate-200 relative bg-slate-100 group">
+                {footerInfo.map_url.includes('<iframe') ? (
+                  <div dangerouslySetInnerHTML={{ __html: footerInfo.map_url }} className="absolute inset-0 [&>iframe]:w-full [&>iframe]:h-full" />
+                ) : (
+                  <>
+                    <iframe
+                      src={`https://maps.google.com/maps?q=${encodeURIComponent(footerInfo.address || 'Dhaka')}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen={false}
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Office Location Map"
+                      className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
+                    />
+                    <a
+                      href={footerInfo.map_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="absolute bottom-3 right-3 bg-white/95 backdrop-blur text-xs font-bold px-3.5 py-2 rounded-lg shadow-md border border-slate-200 text-slate-700 hover:text-[#C9A84C] hover:border-[#C9A84C]/40 transition-all flex items-center gap-2"
+                    >
+                      <MapPin className="w-3.5 h-3.5" />
+                      View Large Map
+                    </a>
+                  </>
+                )}
+              </div>
+            )}
           </div>
 
         </div>
