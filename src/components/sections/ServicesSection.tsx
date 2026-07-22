@@ -6,7 +6,7 @@ import img2 from '../../assets/image/31.jfif';
 import img3 from '../../assets/image/4.jfif';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
-import { UI, pick } from '../../data/translations';
+import { UI, pick, type LangKey } from '../../data/translations';
 import { useOurInvestmentList, type OurInvestmentItem } from '../../hooks/useOurInvestmentList';
 import { useOurVision } from '../../hooks/useOurVision';
 import { getImageUrl } from '../../utils/imageUrl';
@@ -28,7 +28,7 @@ const VISUALS = [
   { icon: <Map size={38} />, image: img3 },
 ];
 
-const ServiceCard: React.FC<{ service: OurInvestmentItem, index: number, lang: any, s: any }> = ({ service, index, lang, s }) => {
+const ServiceCard: React.FC<{ service: OurInvestmentItem, index: number, lang: LangKey, s: typeof UI.services }> = ({ service, index, lang, s }) => {
   const [currentImgIdx, setCurrentImgIdx] = useState(0);
 
   const handlePrev = (e: React.MouseEvent) => {

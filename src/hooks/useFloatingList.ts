@@ -13,8 +13,6 @@ export const useFloatingList = () => {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    setError(false);
 
     fetch(`${import.meta.env.VITE_API_BASE_URL}/floating-list`)
       .then((res) => res.json())

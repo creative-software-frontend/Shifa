@@ -25,8 +25,8 @@ export const useInvestmentCategories = () => {
         } else {
           setError('Failed to fetch investment categories');
         }
-      } catch (err: any) {
-        setError(err.message || 'Error fetching categories');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Error fetching categories');
       } finally {
         setLoading(false);
       }
